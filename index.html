@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Popup Love Message</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: rgb(206, 236, 250);
+      overflow: hidden;
+    }
+
+    .popup {
+      position: absolute;
+      padding: 10px 20px;
+      background-color: #f8c7da;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      font-weight: bold;
+      font-size: 18px;
+      color: white;
+      border-radius: 8px;
+      box-shadow: 0 0 10px pink;
+      animation: fadeOut 10s ease forwards;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .popup img {
+      width: 30px;
+      height: 30px;
+    }
+
+    @keyframes fadeOut {
+      0% { opacity: 1; transform: scale(1); }
+      100% { opacity: 0; transform: scale(0.5); }
+    }
+
+    .floating-img {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      opacity: 0.9;
+      animation: floatUp 8s linear forwards;
+      pointer-events: none;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0) scale(1); opacity: 1; }
+      100% { transform: translateY(-100vh) scale(0.8); opacity: 0; }
+    }
+
+    .dialog {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #f8c7da;
+      padding: 20px;
+      border-radius: 10px;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      font-size: 24px;
+      color: white;
+      text-align: center;
+      box-shadow: 0 0 15px pink;
+      z-index: 1000;
+      max-width: 80%;
+      box-sizing: border-box;
+    }
+
+    /* 💞 Ảnh final */
+    #finalImage {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.8);
+      opacity: 0;
+      width: 60%;
+      max-width: 600px;
+      border-radius: 20px;
+      box-shadow: 0 0 40px pink, 0 0 80px hotpink;
+      animation: fadeInFinal 4s ease forwards, pulse 6s infinite alternate;
+      z-index: 2000;
+    }
+
+    @keyframes fadeInFinal {
+      from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+      to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    }
+
+    @keyframes pulse {
+      from { transform: translate(-50%, -50%) scale(1); }
+      to { transform: translate(-50%, -50%) scale(1.05); }
+    }
+
+    /* 💖 Dòng chữ cuối cùng */
+    #finalText {
+      position: fixed;
+      top: 80%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: pink;
+      font-size: 60px;
+      font-family: 'Brush Script MT', 'Great Vibes', cursive;
+      font-weight: bold;
+      letter-spacing: 2px;
+      opacity: 0;
+      text-shadow: 0 0 30px white, 0 0 60px hotpink, 0 0 90px pink;
+      z-index: 2100;
+      animation: fadeInText 3s ease forwards 3s, glow 2s infinite alternate 3s;
+    }
+
+    @keyframes fadeInText {
+      from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+      to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    }
+
+    @keyframes glow {
+      from { text-shadow: 0 0 20px pink, 0 0 40px white; }
+      to { text-shadow: 0 0 50px white, 0 0 80px hotpink; }
+    }
+
+    @media screen and (max-width: 600px) {
+      .popup { padding: 8px 12px; font-size: 14px; }
+      .dialog { padding: 15px; font-size: 18px; }
+      #finalText { font-size: 40px; }
+    }
+
+    @media screen and (max-width: 400px) {
+      .popup { padding: 6px 10px; font-size: 12px; }
+      .dialog { padding: 10px; font-size: 16px; }
+      #finalText { font-size: 32px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="startDialog" class="dialog">Click vào màn hình nhaaa!</div>
+
+  <audio id="backgroundMusic" src="music.mp3" loop></audio>
+<script>
+  const messages = ["I Miss You 💖", "Love You 🌹", "You’re My Everything 💞", "Thinking of You 💫"];
+  const colors = ["white", "#FFD6EC", "#FFF0F5", "#FFE4E1"];
+  const dialog = document.getElementById("startDialog");
+  const audio = document.getElementById("backgroundMusic");
+  const images = ["anh1.png", "anh2.png", "anh3.png", "anh4.png", "anh5.png"];
+
+  function createPopup() {
+    const popup = document.createElement("div");
+    popup.className = "popup";
+
+    const img = document.createElement("img");
+    img.src = images[Math.floor(Math.random() * images.length)];
+    popup.appendChild(img);
+
+    const text = document.createElement("span");
+    text.textContent = messages[Math.floor(Math.random() * messages.length)];
+    text.style.color = colors[Math.floor(Math.random() * colors.length)];
+    popup.appendChild(text);
+
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+    const x = Math.random() * (screenWidth - 150);
+    const y = Math.random() * (screenHeight - 50);
+    popup.style.left = `${x}px`;
+    popup.style.top = `${y}px`;
+
+    document.body.appendChild(popup);
+    setTimeout(() => popup.remove(), 10000);
+  }
+
+  function createFloatingImage() {
+    const img = document.createElement("img");
+    img.src = images[Math.floor(Math.random() * images.length)];
+    img.className = "floating-img";
+    const screenWidth = window.innerWidth;
+    const x = Math.random() * (screenWidth - 50);
+    const y = window.innerHeight + 50;
+    img.style.left = `${x}px`;
+    img.style.top = `${y}px`;
+    img.style.animationDuration = `${5 + Math.random() * 5}s`;
+    document.body.appendChild(img);
+    setTimeout(() => img.remove(), 8000);
+  }
+
+  function startEffects() {
+    let created = 0;
+    const interval = setInterval(() => {
+      if (created >= 150) {
+        clearInterval(interval);
+        // 💫 khi tạo đủ popup thì chờ thêm 3s cho tan hết rồi hiện ảnh final
+        setTimeout(showFinalScene, 3000);
+        return;
+      }
+      createPopup();
+      createFloatingImage();
+      created++;
+    }, 120);
+  }
+
+  function showFinalScene() {
+    const img = document.createElement("img");
+    img.src = "final.png";
+    img.id = "finalImage";
+    document.body.appendChild(img);
+
+    // chữ hiện sau 2 giây cho khớp nhịp
+    setTimeout(() => {
+      const text = document.createElement("div");
+      text.id = "finalText";
+      text.textContent = "💖 Happy 20/10 nhaaaaa 💖";
+      document.body.appendChild(text);
+    }, 2000);
+  }
+
+  function enterFullscreen() {
+    const elem = document.documentElement;
+    if (elem.requestFullscreen) elem.requestFullscreen();
+    else if (elem.mozRequestFullScreen) elem.mozRequestFullScreen();
+    else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
+    else if (elem.msRequestFullscreen) elem.msRequestFullscreen();
+  }
+
+  document.addEventListener("click", function startExperience() {
+    dialog.style.display = "none";
+    audio.play().catch((error) => console.log("Lỗi phát nhạc:", error));
+    enterFullscreen();
+    startEffects();
+    document.removeEventListener("click", startExperience);
+  });
+</script>
+
+</body>
+</html>
